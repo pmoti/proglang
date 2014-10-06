@@ -1,0 +1,9 @@
+
+fun is_older(earlierDt: int * int * int, laterDt: int * int * int) = 
+    let
+	fun is_less(x: int, y: int) =
+	    x < y
+    in
+	#1 earlierDt < #1:laterDt orelse is_less(#2: earlierDt #2: laterDt)
+    end
+
