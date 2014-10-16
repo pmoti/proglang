@@ -88,37 +88,37 @@ fun oldest(dates : (int*int*int) list) =
 fun number_in_months_challenge(dates : (int*int*int) list, months : int list) =
     let 
 	fun check_dupe(unique_months: int list, month_to_check : int, checklist : int list) =
-	    if (hd checklist) = month_to_check 
-	    then unique_months
+	    if null checklist
+	    then unique_months @ [month_to_check ]
 	    else 
-		if null (tl checklist) 
-		then month_to_check :: unique_months
+		if (hd checklist) = month_to_check 
+		then unique_months
 		else check_dupe(unique_months, month_to_check, tl checklist)
 
-	fun remove_dupes(unique_months : int list, month : int, left_to_check : int list) =
+	fun remove_dupes(unique_months : int list, left_to_check : int list) =
 	    if null left_to_check
 	    then unique_months
-	    else remove_dupes(check_dupe(unique_months, month, left_to_check), hd(left_to_check), tl left_to_check)
+	    else remove_dupes(check_dupe(unique_months, hd left_to_check, tl left_to_check), tl left_to_check)
     in
-	number_in_months(dates, remove_dupes([hd months], hd (tl months), tl (tl months)))
+	number_in_months(dates, remove_dupes([],months))
     end
 
 fun dates_in_months_challenge(dates : (int*int*int) list, months : int list) =
     let 
 	fun check_dupe(unique_months: int list, month_to_check : int, checklist : int list) =
-	    if (hd checklist) = month_to_check 
-	    then unique_months
+	    if null checklist
+	    then unique_months @ [ month_to_check ]
 	    else 
-		if null (tl checklist) 
-		then month_to_check :: unique_months
+		if (hd checklist) = month_to_check 
+		then unique_months
 		else check_dupe(unique_months, month_to_check, tl checklist)
 
-	fun remove_dupes(unique_months : int list, month : int, left_to_check : int list) =
+	fun remove_dupes(unique_months : int list, left_to_check : int list) =
 	    if null left_to_check
 	    then unique_months
-	    else remove_dupes(check_dupe(unique_months, month, left_to_check), hd(left_to_check), tl left_to_check)
+	    else remove_dupes(check_dupe(unique_months, hd left_to_check, tl left_to_check), tl left_to_check)
     in
-	dates_in_months(dates, remove_dupes([hd months], hd (tl months), tl (tl months)))
+	dates_in_months(dates, remove_dupes([], months))
     end
 
 fun reasonable_date(date : int*int*int) = 
@@ -135,7 +135,7 @@ fun reasonable_date(date : int*int*int) =
 		else exists(tl list_to_check, value)
 			    
 	fun is_leap_year(year : int) =
-	    ((year mod 4 = 0 orelse year mod 400 = 0) andalso year mod 100 > 0)
+	    ((year mod 4 = 0) andalso (year mod 100 > 0 orelse year mod 400 = 0))
     in
 	if (#1 date < 1) then false
 	else if (#2 date < 1 orelse #2 date > 12) then false
