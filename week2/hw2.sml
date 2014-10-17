@@ -8,14 +8,25 @@ fun same_string(s1 : string, s2 : string) =
 
 (* put your solutions for problem 1 here *)
 fun all_except_option(target : string, srchlist : string list) =
-    case srchlist =
-	 [] => []
-       | x::[] => if (same_string(x,target)) then [] else srchlist
-       | x::xs' => if (same_string(x,target)) 
-		   then all_except_option(x,srchlist)
-		   else x::all_except_option(x,srchlist)
-end
+    let 
+	fun remove_from_list(t1 : string, srchlist1 : string list) = 
+	   case srchlist1 of 
+	       [] => []
+	     | x::xs' => if (same_string(x, target))
+			 then xs'
+			 else (x::remove_from_list(target,xs'))
+	val res = remove_from_list(target, srchlist);
+    in
+	case res of
+	 [] => NONE
+	 | x => SOME x
+    end
 
+fun get_substitutions1(search_space : string list list, s1: string) = 
+    case search_space of
+	 [] => []
+       | x::xs' => all_except_option(s1, x)  @ get_substitutions1(xs', s1)
+    
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
 datatype suit = Clubs | Diamonds | Hearts | Spades
