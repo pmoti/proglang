@@ -127,4 +127,4 @@ fun officiate(cards, moves, goal) =
     in
 	score(process_moves([],cards,moves),goal)
     end
-	
+
