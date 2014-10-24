@@ -51,7 +51,22 @@ val longest_string3 = longest_string_helper (fn (x,y) => x > y )
 
 val longest_string4 = longest_string_helper (fn (x,y) => x >= y)
     
-val longest_capitalized_string = longest_string1 o only capitals
+val longest_capitalized_string = longest_string1 o only_capitals
 
 fun rev_string s = 
     (implode o rev o explode) s
+
+fun first_answer f lst =
+    case lst of
+	[] => raise NoAnswer
+      | x::xs' => case f x of
+		     SOME y => y
+		   | NONE => first_answer f xs'
+
+fun all_answers f lst = 
+    case lst of
+	[] => raise NoAnswer
+      | x::xs' => case f x of
+		      NONE => NONE
+		     SOME y => y
+		   | NONE => first_answer f xs'
