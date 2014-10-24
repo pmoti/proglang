@@ -55,3 +55,8 @@ val longest_capitalized_string = longest_string1 o only capitals
 
 fun rev_string s = 
     (implode o rev o explode) s
+
+fun first_answer f x =
+    
+
+fun all_answers f x = 
