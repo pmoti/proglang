@@ -64,9 +64,11 @@ fun first_answer f lst =
 		   | NONE => first_answer f xs'
 
 fun all_answers f lst = 
-    case lst of
-	[] => raise NoAnswer
-      | x::xs' => case f x of
-		      NONE => NONE
-		     SOME y => y
-		   | NONE => first_answer f xs'
+    let 
+	val nf = fn (x,y) => (case y of NONE => NONE 
+				      | SOME y => SOME (x@y) )
+    in
+    List.foldl (nf) (SOME ([])) (List.map f lst)
+
+    end
+					   
