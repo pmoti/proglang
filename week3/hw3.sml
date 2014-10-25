@@ -64,11 +64,18 @@ fun first_answer f lst =
 		   | NONE => first_answer f xs'
 
 fun all_answers f lst = 
-    let 
-	val nf = fn (x,y) => (case y of NONE => NONE 
-				      | SOME y => SOME (x@y) )
+    let
+	fun append(lst, acc) =
+	    case lst of
+		[] => acc
+	      | NONE::_ => []
+	      | (SOME y)::xs' => append(xs', acc@y)
     in
-    List.foldl (nf) (SOME ([])) (List.map f lst)
-
+	case append((List.map f lst), []) of
+	    [] => NONE
+	  | x => SOME x
     end
-					   
+
+val count_wildcards = g (fn () => 1) (fn x => 0) 
+
+		    
