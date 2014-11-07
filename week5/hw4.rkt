@@ -15,11 +15,9 @@
          (string-append x suffix)) xs))
   
 (define (list-nth-mod xs n)
-  (if (< n 0) 
-      (error "list-nth-mod: negative number")
-      (if (null? xs)
-           (error "list-nth-mod: empty list")
-           (car (list-tail xs (remainder n (length xs)))))))
+  (cond [(< n 0) (error "list-nth-mod: negative number")]
+         [(null? xs) (error "list-nth-mod: empty list")]
+         [#t (car (list-tail xs (remainder n (length xs))))]))
            
 (define (stream-for-n-steps s n)
   (if (= n 0) 
@@ -45,8 +43,33 @@
         (lambda () (f 0))))
 
 (define (vector-assoc v vec)
-  ()
-  )
+  (letrec ([f (lambda (n) (
+                           if (< n (vector-length vec))
+                              (let ([x (vector-ref vec n)])
+                                (if (and (pair? x) (equal? (car x) v)) x (f (+ n 1))))
+                              #f))])
+    (f 0)))
 
 (define (cached-assoc xs n)
-  
+  (letrec ([cache (make-vector n)]
+    [i 0]
+    [f (lambda(v)
+         (let ([anslk (vector-member v cache)])
+           (if anslk
+               (vector-ref cache anslk)
+               (let ([new-ans (assoc v xs)])
+                 (if (null? new-ans)
+                     (#f)
+                     (begin
+                       (vector-set! cache i new-ans)
+                       (set! i (remainder (+ i 1) n))
+                       new-ans))))))])
+    (lambda(v) (f v))))
+
+(define-syntax while-less
+  (syntax-rules (do)
+    [(while-less e1 do e2)
+     (letrec ([f (lambda(x) (if (> x e2)
+                              (f x)
+                              #t))])
+              (f e1))]))
