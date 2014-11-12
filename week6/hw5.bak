@@ -23,19 +23,6 @@
 ;; Problem 1
 
 ;; CHANGE (put your solutions here)
-(define (racketlist->mupllist racketlist)
-  (letrec ([f (lambda (xs)
-                (cond [(null? xs) (aunit )]
-                  [(null? (cdr xs)) (apair (car xs) (aunit))]
-                  [#t (apair (car xs) (f (cdr xs)))]))])
-    (f racketlist)))
-           
-(define (mupllist->racketlist mupllist)
-  (letrec ([f (lambda (xs)
-                (cond [(aunit? xs) (null)]
-                  [(aunit? (apair-e2 xs)) (cons (apair-e1 xs) null)]
-                  [#t (cons (apair-e1 xs) (f (apair-e2 xs)))]))])
-    (f mupllist)))
 
 ;; Problem 2
 
@@ -62,20 +49,6 @@
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
         ;; CHANGE add more cases here
-        [(int? e)
-         e]
-        [(fun? e)
-         (closure env fun)]
-        [(ifgreater? e)
-         (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
-               [v2 (eval-under-env (ifgreater-e2 e) env)])
-           (if (and (int? v1)
-                    (int? v2))
-               (if (> v1 v2)
-                   (eval-under-env (ifgreater-e3 e) env)
-                   (eval-under-env (ifgreater-e4 e) env))
-               (error "MUPL ifgreater applied to non-number")))]
-        
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change
